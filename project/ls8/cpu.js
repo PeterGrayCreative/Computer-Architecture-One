@@ -88,7 +88,6 @@ class CPU {
         this.reg[regA] = this.reg[regA] + this.reg[regB];
         break;
       case 'AND':
-        console.log(this.reg(regA));
         this.reg[regA] = this.reg[regA] & this.reg[regB];
     }
   }
@@ -124,7 +123,6 @@ class CPU {
     // !!! IMPLEMENT ME
 
     if (!handler) {
-      console.log('if statement', handler);
       this.HLT();
       return undefined;
     }
