@@ -9,7 +9,7 @@ const LDI = 0b10011001;
 const MUL = 0b10101010;
 const PRN = 0b01000011;
 const ADD = 0b10101000;
-const ADN = 0b10101000;
+const AND = 0b10101000;
 const NOP = 0b00000000;
 
 /**
@@ -37,11 +37,11 @@ class CPU {
     let bt = {};
     bt[HLT] = this.HLT;
     bt[LDI] = this.LDI;
-    bt['MUL'] = this.MUL;
+    bt[MUL] = this.MUL;
     bt[PRN] = this.PRN;
-    bt['ADD'] = this.ADD;
-    bt['AND'] = this.AND;
-    bt['NOP'] = this.NOP;
+    bt[ADD] = this.ADD;
+    bt[AND] = this.AND;
+    bt[NOP] = this.NOP;
     this.branchTable = bt;
   }
 
@@ -88,6 +88,7 @@ class CPU {
         this.reg[regA] = this.reg[regA] + this.reg[regB];
         break;
       case 'AND':
+        console.log(this.reg(regA));
         this.reg[regA] = this.reg[regA] & this.reg[regB];
     }
   }
@@ -115,15 +116,15 @@ class CPU {
 
     const operandA = this.ram.read(this.reg.PC + 1);
     const operandB = this.ram.read(this.reg.PC + 2);
-
+    // console.log('operands', operandA, operandB);
     let handler = this.branchTable[this.reg.IR];
-
     // Execute the instruction. Perform the actions for the instruction as
     // outlined in the LS-8 spec.
 
     // !!! IMPLEMENT ME
 
     if (!handler) {
+      console.log('if statement', handler);
       this.HLT();
       return undefined;
     }
