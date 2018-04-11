@@ -12,7 +12,7 @@ function loadMemory() {
   // Hardcoded program to print the number 8 on the console
   // Peter's Solution
   const readLine = require('readline').createInterface({
-    input: require('fs').createReadStream('./' + process.argv[2], 'utf8'),
+    input: require('fs').createReadStream(`./${process.argv[2]}`, 'utf8'),
   });
 
   let instructionCount = 0;
