@@ -1,4 +1,4 @@
-  /**
+/**
  * LS-8 v2.0 emulator skeleton code
  */
 
@@ -178,144 +178,147 @@ module.exports = CPU;
 
 
 // /**
-//  * LS-8 v2.0 emulator skeleton code
-//  */
+//   * LS-8 v2.0 emulator skeleton code
+//   */
 
-// const fs = require('fs');
+//  const fs = require('fs');
 
-// const HLT = 0b00000001; // Halt CPU
-// const LDI = 0b10011001;
-// const MUL = 0b10101010;
-// const PRN = 0b01000011;
-// const ADD = 0b10101000;
-// const AND = 0b10101000;
-// const NOP = 0b00000000;
-// const POP = 0b01001100;
-// const INC = 0b01111000;
-// const DEC = 0b01111001;
+//  const HLT = 0b00000001; // Halt CPU
+//  const LDI = 0b10011001;
+//  const MUL = 0b10101010;
+//  const PRN = 0b01000011;
+//  const ADD = 0b10101000;
+//  const AND = 0b10101000;
+//  const NOP = 0b00000000;
+//  const POP = 0b01001100;
+//  const INC = 0b01111000;
+//  const DEC = 0b01111001;
+//  const PUSH = 0b1001101;
 
-// const SP = 0x07;
+//  const SP = 0x07;
 
-// /**
-//  * Class for simulating a simple Computer (CPU & memory)
-//  */
-// class CPU {
-//   /**
-//    * Initialize the CPU
-//    */
-//   constructor(ram) {
-//     this.ram = ram;
-//     this.reg[SP] = 0xf3;
+// // /**
+// //  * Class for simulating a simple Computer (CPU & memory)
+// //  */
+//  class CPU {
+//    /**
+//     * Initialize the CPU
+// //    */
+//    constructor(ram) {
+//      this.ram = ram;
+//     // this.reg[SP] = 0xf3;
 
-//     this.reg = new Array(8).fill(0); // General-purpose registers R0-R7
+//      this.reg = new Array(8).fill(0); // General-purpose registers R0-R7
+//      this.reg[SP] = 0xf3;
+// //     // Special-purpose registers
+//      this.reg.PC = 0; // Program Counter
+//      this.reg.IR = 0; // Instruction Register
 
-//     // Special-purpose registers
-//     this.reg.PC = 0; // Program Counter
-//     this.reg.IR = 0; // Instruction Register
+//      this.setupBranchTable();
+//    }
 
-//     this.setupBranchTable();
-//   }
+// //   /**
+// //    * Set up the branch table
+// //    */
+//    setupBranchTable() {
+//      let bt = {};
+//      bt[HLT] = this.HLT;
+//      bt[LDI] = this.LDI;
+//      bt[MUL] = this.MUL;
+//      bt[PRN] = this.PRN;
+//      bt[ADD] = this.ADD;
+//      bt[AND] = this.AND;
+//      bt[NOP] = this.NOP;
+//  	   bt[INC] = this.INC;
+//  	   bt[DEC] = this.DEC;
+//      bt[POP] = this.POP;
+//      bt[PUSH] = this.PUSH;
 
-//   /**
-//    * Set up the branch table
-//    */
-//   setupBranchTable() {
-//     let bt = {};
-//     bt[HLT] = this.HLT;
-//     bt[LDI] = this.LDI;
-//     bt[MUL] = this.MUL;
-//     bt[PRN] = this.PRN;
-//     bt[ADD] = this.ADD;
-//     bt[AND] = this.AND;
-//     bt[NOP] = this.NOP;
-// 		bt[INC] = this.INC;
-// 		bt[DEC] = this.DEC;
-// 		bt[POP] = this.POP;
+//      this.branchTable = bt;
+//    }
 
-//     this.branchTable = bt;
-//   }
+// //   /**
+// //    * Store value in memory address, useful for program loading
+// //    */
 
-//   /**
-//    * Store value in memory address, useful for program loading
-//    */
+//    poke(address, value) {
+//      this.ram.write(address, value);
+//    }
 
-//   poke(address, value) {
-//     this.ram.write(address, value);
-//   }
 
-//   /**
-//    * Starts the clock ticking on the CPU
-//    */
-//   startClock() {
-//     this.clock = setInterval(() => {
-//       this.tick();
-//     }, 1); // 1 ms delay == 1 KHz clock == 0.000001 GHz
-//   }
+// //   /**
+// //    * Starts the clock ticking on the CPU
+// //    */
+//    startClock() {
+//      this.clock = setInterval(() => {
+//        this.tick();
+//      }, 1); // 1 ms delay == 1 KHz clock == 0.000001 GHz
+//    }
 
-//   /**
-//    * Stops the clock
-//    */
-//   stopClock() {
-//     clearInterval(this.clock);
-//   }
+// //   /**
+// //    * Stops the clock
+// //    */
+//    stopClock() {
+//      clearInterval(this.clock);
+//    }
 
-//   /**
-//    * ALU functionality
-//    *
-//    * The ALU is responsible for math and comparisons.
-//    *
-//    * If you have an instruction that does math, i.e. MUL, the CPU would hand
-//    * it off to it's internal ALU component to do the actual work.
-//    *
-//    * op can be: ADD SUB MUL DIV INC DEC CMP
-//    */
-//   alu(op, regA, regB) {
-//     switch (op) {
-//       case 'MUL':
-//         this.reg[regA] = this.reg[regA] * this.reg[regB];
-//         break;
-//       case 'ADD':
-//         this.reg[regA] = this.reg[regA] + this.reg[regB];
-//         break;
-//       case 'AND':
-//         this.reg[regA] = this.reg[regA] & this.reg[regB];
-// 			case 'INC':
-// 				this.reg[regA] += 1;
-// 			case 'DEC':
-// 				this.reg[regA] -= 1;
-//     }
-//   }
+// //   /**
+// //    * ALU functionality
+// //    *
+// //    * The ALU is responsible for math and comparisons.
+// //    *
+// //    * If you have an instruction that does math, i.e. MUL, the CPU would hand
+// //    * it off to it's internal ALU component to do the actual work.
+// //    *
+// //    * op can be: ADD SUB MUL DIV INC DEC CMP
+// //    */
+//    alu(op, regA, regB) {
+//      switch (op) {
+//        case 'MUL':
+//          this.reg[regA] = this.reg[regA] * this.reg[regB];
+//          break;
+//        case 'ADD':
+//          this.reg[regA] = this.reg[regA] + this.reg[regB];
+//          break;
+//        case 'AND':
+//          this.reg[regA] = this.reg[regA] & this.reg[regB];
+//  			case 'INC':
+//  				this.reg[regA] += 1;
+//  			case 'DEC':
+//  				this.reg[regA] -= 1;
+//      }
+//    }
 
-//   /**
-//    * Advances the CPU one cycle
-//    */
-//   tick() {
-//     // Load the instruction register (IR--can just be a local variable here)
-//     // from the memory address pointed to by the PC. (I.e. the PC holds the
-//     // index into memory of the instruction that's about to be executed
-//     // right now.)
+// //   /**
+// //    * Advances the CPU one cycle
+// //    */
+//    tick() {
+// //     // Load the instruction register (IR--can just be a local variable here)
+// //     // from the memory address pointed to by the PC. (I.e. the PC holds the
+// //     // index into memory of the instruction that's about to be executed
+// //     // right now.)
 
-//     // !!! IMPLEMENT ME
-//     this.reg.IR = this.ram.read(this.reg.PC);
-//     // Debugging output
-//     //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
+// //     // !!! IMPLEMENT ME
+//      this.reg.IR = this.ram.read(this.reg.PC);
+// //     // Debugging output
+// //    //  console.log(`${this.reg.PC}: ${this.reg.IR.toString(2)}`);
 
-//     // Get the two bytes in memory _after_ the PC in case the instruction
-//     // needs them.
+// //     // Get the two bytes in memory _after_ the PC in case the instruction
+// //     // needs them.
 
-//     // !!! IMPLEMENT ME
+// //     // !!! IMPLEMENT ME
 
-//     let offset = (this.reg.IR >> 6) & 0b00000011;
+//      let offset = (this.reg.IR >> 6) & 0b00000011;
 
-//     const operandA = this.ram.read(this.reg.PC + 1);
-//     const operandB = this.ram.read(this.reg.PC + 2);
-//     // console.log('operands', operandA, operandB);
-//     let handler = this.branchTable[this.reg.IR];
-//     // Execute the instruction. Perform the actions for the instruction as
-//     // outlined in the LS-8 spec.
+//      const operandA = this.ram.read(this.reg.PC + 1);
+//      const operandB = this.ram.read(this.reg.PC + 2);
+//   //    console.log('operands', operandA, operandB);
+//      let handler = this.branchTable[this.reg.IR];
+// //     // Execute the instruction. Perform the actions for the instruction as
+// //     // outlined in the LS-8 spec.
 
-//     // !!! IMPLEMENT ME
-
+// //     // !!! IMPLEMENT ME
+// //    console.log(handler);
 //     if (!handler) {
 //       this.HLT();
 //       return undefined;
@@ -363,17 +366,17 @@ module.exports = CPU;
 // 		const value = this.ram.read(this.reg[SP]);
 // 		this.alu('INC', SP);
 // 		return value;
-// 	}
-// 	POP(regA) {
-// 		this.reg[regA] = this._pop();
-// 	}
-// 	_push(value) {
-// 		this.alu('DEC', SP);
-// 		this.ram.write(this.reg[SP], value);
-// 	}
-// 	PUSH(regA) {
-// 		this._push(this.reg[regA]);
-// 	}
-// }
+//  	}
+//  	POP(regA) {
+//  		this.reg[regA] = this._pop();
+//  	}
+//  	_push(value) {
+//  		this.alu('DEC', SP);
+//  		this.ram.write(this.reg[SP], value);
+//  	}
+//  	PUSH(regA) {
+//  		this._push(this.reg[regA]);
+//  	}
+//  }
 
-// module.exports = CPU;
+//  module.exports = CPU;
