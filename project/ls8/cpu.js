@@ -13,7 +13,10 @@ const AND = 0b10101000;
 const NOP = 0b00000000;
 const PUSH = 0b01001101;
 const POP = 0b01001100;
+const CALL = 0b01001000;
+const RET = 0b00001001;
 
+const SP = 7;
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -37,16 +40,18 @@ class CPU {
    * Set up the branch table
    */
   setupBranchTable() {
-    let bt = {};
-    bt[HLT] = this.HLT;
-    bt[LDI] = this.LDI;
-    bt[MUL] = this.MUL;
-    bt[PRN] = this.PRN;
-    bt[ADD] = this.ADD;
-    bt[AND] = this.AND;
-    bt[NOP] = this.NOP;
+    let bt   = {};
+    bt[HLT]  = this.HLT;
+    bt[LDI]  = this.LDI;
+    bt[MUL]  = this.MUL;
+    bt[PRN]  = this.PRN;
+    bt[ADD]  = this.ADD;
+    bt[AND]  = this.AND;
+    bt[NOP]  = this.NOP;
     bt[PUSH] = this.PUSH;
-    bt[POP] = this.POP;
+    bt[POP]  = this.POP;
+    bt[CALL] = this.CALL;
+    bt[RET]  = this.RET;
     this.branchTable = bt;
   }
 
@@ -165,12 +170,18 @@ class CPU {
     return undefined;
   }
   PUSH(reg) {
-    this.reg[111]--;
-    this.ram.write(this.reg[111], this.reg[reg]);
+    this.reg[SP]--;
+    this.ram.write(this.reg[SP], this.reg[reg]);
   }
   POP(reg) {
-    this.reg[reg] = this.ram.read(this.reg[111]);
-    this.reg[111]++;
+    this.reg[reg] = this.ram.read(this.reg[SP]);
+    this.reg[SP]++;
+  }
+  CALL(reg) {
+
+  }
+  RET(reg) {
+    this.reg.PC = this.POP();
   }
 }
 
